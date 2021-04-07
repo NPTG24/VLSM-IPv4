@@ -1,4 +1,4 @@
-# VLSM-ipv4
+# VLSM-IPv4
 El subneteo con VLSM (Variable Length Subnet Mask), máscara variable ó máscara de subred de longitud variable, es uno de los métodos que se implementó para evitar el agotamiento de direcciones IPv4 permitiendo un mejor aprovechamiento y optimización del uso de direcciones. Y VLSM en sí, es el resultado del proceso por el cual se divide una red o subred en subredes más pequeñas cuyas máscaras son diferentes según se adaptan a las necesidades de hosts por subred.
 
 ## Instalación 🔧
