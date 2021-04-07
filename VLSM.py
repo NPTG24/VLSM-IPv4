@@ -141,7 +141,7 @@ def calculos(host, IPinicial, prefijo):
 
     for i in range(len(exp)):
         print(f"Para {host[i]} hosts necesito {exp[i]} bits")
-        print(f"Los host maximos serían: 2^{exp[i]} - 2 (red inicial y broadcast) = ", hm[i])
+        print(f"Los hosts máximos serían: 2^{exp[i]} - 2 (red inicial y broadcast) = ", hm[i])
         print("Su dirección inicial es: ", end ="")
         IPinicial[3] = int(IPinicial[3]) + int(c)
         print(*IPinicial, sep =".")
