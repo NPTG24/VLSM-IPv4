@@ -1,3 +1,5 @@
+result = []
+
 def datosp():
     IPinicial = []
     host = []
@@ -58,6 +60,7 @@ def datosp():
     print("Ordenando de mayor a menor quedaría de la siguiente forma....")
     print(host)
     tabla()
+    result.clear()
     calculos(host, IPinicial, prefijo)
 
 def tabla():
@@ -98,8 +101,8 @@ def bin(prefijo):
     print("Binario del prefijo:", *imprimir, sep=" ")
     bindec(binario)
 
+
 def bindec(binario):
-    result = []
     n = 0
     for j in range(len(binario)+4):
         if binario[0][j] == 1:
@@ -123,43 +126,72 @@ def bindec(binario):
         if binario[3][j] == 1:
             n += pow(2, 7-j)
     result.append(n)
+
     print("Conversión de binario a decimal(máscara de red): ", end="")
     print(*result, sep=".")
 
 def calculos(host, IPinicial, prefijo):
-    IP = [128, 64, 32, 16, 8, 4, 2]
+    IP = [8192,4096,2048,1024,512,256,128,64,32,16,8,4,2] #host = [80, 60, 20, 2, 2, 2]
     hm = []
     exp = []
+    nuevo = []
     c = 0
     for i in range(len(host)):
         for j in range(len(IP)):
             if IP[j] > host[i]:
-                x = pow(2, 7-j) - 2
-                e = 7-j
+                x = pow(2, 13 - j) - 2
+                e = 13-j
         hm.append(x)
         exp.append(e)
 
     for i in range(len(exp)):
+        result.clear()
+        ceros = 32-prefijo 
         print(f"Para {host[i]} hosts necesito {exp[i]} bits")
         print(f"Los hosts máximos serían: 2^{exp[i]} - 2 (red inicial y broadcast) = ", hm[i])
         print("Su dirección inicial es: ", end ="")
         IPinicial[3] = int(IPinicial[3]) + int(c)
-        print(*IPinicial, sep =".")
+        if IPinicial[3] == 256:
+            nuevo = IPinicial[:]
+            nuevo[2] = int(nuevo[2]) + int(1)
+            nuevo[3] = 0
+            print(*nuevo, sep =".")
+        else:
+            print(*IPinicial, sep =".")
+        t = ceros-exp[i]+prefijo
+        
+        print(f"el prefijo de la máscara es: {ceros} - {exp[i]} + {prefijo} = {t} ")
+        bin(t)
         print("Su rango de direcciones válido es: ", end ="")
         IPinicial[3] = int(IPinicial[3]) + int(1)
-        print(*IPinicial, sep =".", end="")
-        print(" - ", end="")
-        IPinicial[3] = int(IPinicial[3]) + int(hm[i]) - int(1)
-        print(*IPinicial, sep =".")
+        if IPinicial[3] > 255:
+            IPinicial[3] = 1
+            IPinicial[2] = int(IPinicial[2]) + int(1)
+            print(*IPinicial, sep =".", end="")
+        elif IPinicial[3] < 256:
+            print(*IPinicial, sep =".", end="")
+    
+        IPinicial[3] = int(IPinicial[3]) + int(hm[i]) - int(1)    
+          
+        if IPinicial[3] > 254:
+            IPinicial[3] = 254
+            print(" - ", end="")
+            if result[3] > 0:
+                IPinicial[3] = int(255) - int(result[3])
+                print(*IPinicial, sep =".")
+            elif result[3] == 0 and result[2] > 0:
+                IPinicial[2] = int(IPinicial[2]) + (int(255) - int(result[2]))
+                print(*IPinicial, sep =".")
+
+        elif IPinicial[3] <= 254:                
+            print(" - ", end="")  
+            print(*IPinicial, sep =".")
         print(f"El broadcast de la red es: ", end="")
         IPinicial[3] = int(IPinicial[3]) + int(1)
         print(*IPinicial, sep =".")
         if c==0:
             c = int(c) + int(1)
-        t = 8-exp[i]+prefijo
-        print(f"el prefijo de la máscara es: 8 - {exp[i]} + {prefijo} = {t} ")
-        bin(t)
         print('\n')
 
-
 datosp()
+
